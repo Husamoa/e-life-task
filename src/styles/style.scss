@@ -34,6 +34,9 @@ input {
 
   &::placeholder {
     color: lightgrey;
+    @media only screen and (max-width: 600px) {
+      font-size: 1rem;
+    }
   }
 }
 
