@@ -14,9 +14,9 @@ const ToggleTheme = () => {
     <div className="toggle__box">
       <span>
         {icon ? (
-          <p className="black">Swich to dark mode</p>
+          <p className="black">Light mode</p>
         ) : (
-          <p className="white">Swich to light mode</p>
+          <p className="white">Dark mode</p>
         )}
       </span>
       <div className="toggle__btn" onClick={toggleTheme}>
