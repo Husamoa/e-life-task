@@ -37,6 +37,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-lines-ellipsis": "^0.14.1",
     "react-simple-storage": "^1.2.1"
   }
 }
