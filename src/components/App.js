@@ -1,98 +1,116 @@
 import React, { Component } from 'react';
-import SimpleStorage from "react-simple-storage";
+import SimpleStorage from 'react-simple-storage';
 
+import Clock from './Clock';
+import Input from './Input';
+import ToDoList from './ToDoList';
+import DoneList from './DoneList';
 
 class App extends Component {
-
-constructor(props){
-  super(props);
-  this.state={
-    items: [],
-    userinput:'',
-    time: setInterval(() => this.setState({ time: new Date().toLocaleTimeString() }), 1000),
-    done:[],
-    temperature: 0
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      userInput: '',
+      done: [],
+      temperature: 0,
+    };
+    this.deleteItem = this.deleteItem.bind(this);
   }
-  this.delete = this.delete.bind(this);
-}
 
-//METHODS
-changinginput=(input)=>{
+// METHODS
+changingInput=(input) => {
   this.setState({
-    userinput: input
-  })
+    userInput: input,
+  });
 };
 
-addtolist=(input)=>{
-  if (this.state.userinput === '') {
-    alert('empty input')
-  }
-  else{
-  var newitems = this.state.items;
-  newitems.push(input);
+addTolist=(input) => {
+  const { userInput, items } = this.state;
+  if (userInput === '') {
+    /* eslint-disable-next-line */
+    alert('empty input');
+  } else {
+    const newitems = items;
+    newitems.push(input);
 
-  this.setState({
-    items: newitems,
-    userinput: ''
-  })
- }
-}
-
-
-delete=(indexp)=>{
-  var newarray = this.state.items.filter((item, index)=> index !== indexp);
-  this.setState({
-    items: newarray
-    })
-  }
-
-deletedone=(indexp)=>{
-    var newarray = this.state.done.filter((item, index)=> index !== indexp);
     this.setState({
-      done: newarray
+      items: newitems,
+      userInput: '',
     });
   }
-
-addToDone=(e)=>{
-  var donelist = this.state.done;
-  donelist.push(e)
-   this.setState({
-     done: donelist
-   });
-   if (this.state.items.length===1) {
-     alert("Good job!", "You clicked the button!", "success");
-   }
 }
 
-handleKeyPress = (event, ) => {
-  if(event.key == 'Enter'){
-    this.addtolist(this.state.userinput);
+
+deleteItem=(indexp) => {
+  const { items } = this.state;
+  const newarray = items.filter((item, index) => index !== indexp);
+  this.setState({
+    items: newarray,
+  });
+}
+
+deleteDone=(indexp) => {
+  const { done } = this.state;
+  const newarray = done.filter((item, index) => index !== indexp);
+  this.setState({
+    done: newarray,
+  });
+}
+
+addToDone=(e) => {
+  const { done, items } = this.state;
+  const donelist = done;
+  donelist.push(e);
+  this.setState({
+    done: donelist,
+  });
+  if (items.length === 1) {
+    /* eslint-disable-next-line */
+    alert('Good job!', 'You clicked the button!', 'success');
+  }
+}
+
+handleKeyPress = (event) => {
+  const { userInput } = this.state;
+  if (event.key === 'Enter') {
+    this.addTolist(userInput);
   }
 }
 
 
-  render(){
-    return(
-      <div id='app'>
-    <SimpleStorage parent={this} />
-      <div className='container'>
-        <h1>{this.state.time}</h1>
-        <div className = 'userinput'>
-          <input  onKeyPress={this.handleKeyPress} placeholder='ENTER TASK' onChange={(e)=>this.changinginput(e.target.value)} value={this.state.userinput} type='text'></input>
-          <div className = 'addbutton' onClick={()=>this.addtolist(this.state.userinput)}>ADD</div>
+render() {
+  const {
+    userInput, items, done,
+  } = this.state;
+  return (
+    <div id="app">
+      <SimpleStorage parent={this} />
+      <div className="container">
+        <h1>
+          <Clock />
+        </h1>
+        <div className="userinput">
+          <Input
+            userInput={userInput}
+            handleKeyPress={this.handleKeyPress}
+            changingInput={this.changingInput}
+            addTolist={this.addTolist}
+          />
         </div>
-        <ul>
-          <h1 className = 'todo'>TO DO</h1>
-          {this.state.items.map((item, index)=><li onClick={(e)=>this.delete(index)} key={index}>{item}<button className='left'  onClick={(e)=>this.addToDone(item)}>DONE</button> </li>)}
-        </ul>
-        <ul>
-          <h1 className = 'done'>DONE</h1>
-          {this.state.done.map((item, index)=><li onClick={(e)=>this.deletedone(index)}  key={index}>{item}    <span>✔</span></li>)}
-        </ul>
+        <ToDoList
+          items={items}
+          deleteItem={this.deleteItem}
+          addToDone={this.addToDone}
+        />
+        <DoneList
+          done={done}
+          deleteDone={this.deleteDone}
+        />
       </div>
     </div>
-    )
-  }
+  );
+}
 }
 
-export default App
+export default App;
