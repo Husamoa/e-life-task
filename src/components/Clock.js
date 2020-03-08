@@ -1,4 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import { ThemeContext } from '../contexts/ThemeContext';
+
 
 export default class Clock extends Component {
   constructor(props) {
@@ -19,18 +21,25 @@ export default class Clock extends Component {
     clearInterval(this.intervalID);
   }
 
+  static contextType = ThemeContext;
+
   tick() {
     this.setState({
       time: new Date().toLocaleTimeString(),
     });
   }
 
+
   render() {
     const { time } = this.state;
+    const { lightTheme } = this.context;
+    const theme = !lightTheme ? ' darkmode' : '';
     return (
-      <Fragment>
-        {time}
-      </Fragment>
+      <div className={`clock${theme}`}>
+        <h1>
+          {time}
+        </h1>
+      </div>
     );
   }
 }

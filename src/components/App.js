@@ -5,6 +5,9 @@ import Clock from './Clock';
 import Input from './Input';
 import ToDoList from './ToDoList';
 import DoneList from './DoneList';
+import ThemeContextProvider from '../contexts/ThemeContext';
+import Navbar from './Navbar';
+
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +16,6 @@ class App extends Component {
       items: [],
       userInput: '',
       done: [],
-      temperature: 0,
     };
     this.deleteItem = this.deleteItem.bind(this);
   }
@@ -85,29 +87,28 @@ render() {
   } = this.state;
   return (
     <div id="app">
-      <SimpleStorage parent={this} />
-      <div className="container">
-        <h1>
+      <ThemeContextProvider>
+        <Navbar />
+        <SimpleStorage parent={this} />
+        <div className="container">
           <Clock />
-        </h1>
-        <div className="userinput">
           <Input
             userInput={userInput}
             handleKeyPress={this.handleKeyPress}
             changingInput={this.changingInput}
             addTolist={this.addTolist}
           />
+          <ToDoList
+            items={items}
+            deleteItem={this.deleteItem}
+            addToDone={this.addToDone}
+          />
+          <DoneList
+            done={done}
+            deleteDone={this.deleteDone}
+          />
         </div>
-        <ToDoList
-          items={items}
-          deleteItem={this.deleteItem}
-          addToDone={this.addToDone}
-        />
-        <DoneList
-          done={done}
-          deleteDone={this.deleteDone}
-        />
-      </div>
+      </ThemeContextProvider>
     </div>
   );
 }

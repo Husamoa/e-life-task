@@ -1,14 +1,21 @@
-import React, { Fragment } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 const Input = ({
   userInput, handleKeyPress, changingInput, addTolist,
-}) => (
-  <Fragment>
-    <input onKeyPress={handleKeyPress} placeholder="ENTER TASK" onChange={e => changingInput(e.target.value)} value={userInput} type="text" />
-    <div className="addbutton" onClick={() => { addTolist(userInput); }} onKeyPress={handleKeyPress} tabIndex="0" role="button">ADD</div>
-  </Fragment>
-);
+}) => {
+  const { lightTheme } = useContext(ThemeContext);
+  const theme = !lightTheme ? ' darkmode' : '';
+  return (
+    <div className={`inputContainer${theme}`}>
+      <div className="userinput">
+        <input onKeyPress={handleKeyPress} placeholder="ENTER TASK" onChange={e => changingInput(e.target.value)} value={userInput} type="text" />
+        <div className={`addbutton${theme}`} onClick={() => { addTolist(userInput); }} onKeyPress={handleKeyPress} tabIndex="0" role="button">ADD</div>
+      </div>
+    </div>
+  );
+};
 
 
 Input.propTypes = {
